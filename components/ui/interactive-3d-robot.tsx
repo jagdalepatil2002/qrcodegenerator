@@ -6,9 +6,10 @@ const Spline = lazy(() => import('@splinetool/react-spline'));
 interface InteractiveRobotSplineProps {
     scene: string;
     className?: string;
+    onLoad?: () => void;
 }
 
-export function InteractiveRobotSpline({ scene, className }: InteractiveRobotSplineProps) {
+export function InteractiveRobotSpline({ scene, className, onLoad }: InteractiveRobotSplineProps) {
     return (
         <Suspense
             fallback={
@@ -23,11 +24,11 @@ export function InteractiveRobotSpline({ scene, className }: InteractiveRobotSpl
                 </div>
             }
         >
-
             <div className="relative w-full h-full">
                 <Spline
                     scene={scene}
                     className={className}
+                    onLoad={onLoad}
                 />
                 {/* Overlay to hide "Built with Spline" logo */}
                 <div

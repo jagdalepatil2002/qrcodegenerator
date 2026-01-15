@@ -10,18 +10,8 @@ interface WelcomePageProps {
 }
 
 export function WelcomePage({ onComplete }: WelcomePageProps) {
-    const [showText, setShowText] = React.useState(false);
-
-    useEffect(() => {
-        // Show text after 2 seconds (giving time for robot to start appearing)
-        const textTimer = setTimeout(() => {
-            setShowText(true);
-        }, 2000);
-
-        return () => {
-            clearTimeout(textTimer);
-        };
-    }, []);
+    const [showText, setShowText] = React.useState(true);
+    const [isRobotLoaded, setIsRobotLoaded] = React.useState(false);
 
     const ROBOT_SCENE_URL = "https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode";
 
@@ -32,6 +22,7 @@ export function WelcomePage({ onComplete }: WelcomePageProps) {
                 <InteractiveRobotSpline
                     scene={ROBOT_SCENE_URL}
                     className="w-full h-full"
+                    onLoad={() => setIsRobotLoaded(true)}
                 />
             </div>
 
@@ -67,7 +58,7 @@ export function WelcomePage({ onComplete }: WelcomePageProps) {
 
                 {/* Right Area: Enter Button */}
                 <div className="w-full md:w-1/2 flex items-center justify-center pointer-events-auto">
-                    {showText && (
+                    {showText && isRobotLoaded && (
                         <div className="animate-in fade-in zoom-in duration-1000 slide-in-from-right-10">
                             <InteractiveHoverButton
                                 text="Enter App"
