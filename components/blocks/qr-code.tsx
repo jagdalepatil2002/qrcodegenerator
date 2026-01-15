@@ -100,8 +100,32 @@ export function QRCodeGenerator() {
         const svgElement = qrRef.current?.querySelector("svg");
         if (svgElement) {
             const serializer = new XMLSerializer();
-            const svgBlob = new Blob([serializer.serializeToString(svgElement)], {
-                type: "image/svg+xml",
+            const sourceSvg = serializer.serializeToString(svgElement);
+
+            // Calculate new dimensions
+            const padding = 40;
+            const extraHeight = 50; // Space for text
+            const newHeight = size + extraHeight;
+
+            // Create wrapper SVG
+            const wrapperSvg = `
+                <svg width="${size}" height="${newHeight}" viewBox="0 0 ${size} ${newHeight}" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100%" height="100%" fill="${backgroundColor}" />
+                    <g>${sourceSvg}</g>
+                    <text 
+                        x="${size / 2}" 
+                        y="${size + 30}" 
+                        text-anchor="middle" 
+                        font-family="'Courier New', Courier, monospace" 
+                        font-weight="bold" 
+                        font-size="${Math.max(12, size / 20)}" 
+                        fill="${color}"
+                    >${text}</text>
+                </svg>
+            `;
+
+            const svgBlob = new Blob([wrapperSvg], {
+                type: "image/svg+xml;charset=utf-8",
             });
             const url = URL.createObjectURL(svgBlob);
             const link = document.createElement("a");
