@@ -2,52 +2,81 @@
 
 import React, { useEffect } from "react";
 import VaporizeTextCycle, { Tag } from "@/components/ui/vapour-text-effect";
+import { InteractiveRobotSpline } from "@/components/ui/interactive-3d-robot";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
 interface WelcomePageProps {
     onComplete: () => void;
 }
 
 export function WelcomePage({ onComplete }: WelcomePageProps) {
-    useEffect(() => {
-        // Duration estimate:
-        // 3 texts ["Welcome", "to", "QR Code Generator"]
-        // Each cycle: Vaporize(2s) + FadeIn(1s) + Wait(0.5s) = 3.5s approx per text
-        // 3 * 3.5 = 10.5s
-        // Let's force completion after 10.5 seconds or let user click to skip?
-        // We'll auto-complete after 10.5s.
-        const timer = setTimeout(() => {
-            onComplete();
-        }, 10500);
+    const [showText, setShowText] = React.useState(false);
 
-        return () => clearTimeout(timer);
-    }, [onComplete]);
+    useEffect(() => {
+        // Show text after 2 seconds (giving time for robot to start appearing)
+        const textTimer = setTimeout(() => {
+            setShowText(true);
+        }, 2000);
+
+        return () => {
+            clearTimeout(textTimer);
+        };
+    }, []);
+
+    const ROBOT_SCENE_URL = "https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode";
 
     return (
-        <div
-            className="bg-black fixed inset-0 z-50 flex justify-center items-center cursor-pointer"
-            onClick={onComplete} // Allow user to skip by clicking
-        >
-            <VaporizeTextCycle
-                texts={["Welcome", "QR Code Generator"]}
-                font={{
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "70px",
-                    fontWeight: 600,
-                }}
-                color="rgb(255, 255, 255)"
-                spread={5}
-                density={5}
-                animation={{
-                    vaporizeDuration: 2,
-                    fadeInDuration: 1,
-                    waitDuration: 0.5,
-                }}
-                direction="left-to-right"
-                alignment="center"
-                tag={Tag.H1}
-            />
-            <div className="absolute bottom-10 text-white/50 text-sm">
-                Click anywhere to skip
+        <div className="bg-black fixed inset-0 z-50 overflow-hidden">
+            {/* Background: Interactive Robot (Full Screen) */}
+            <div className="absolute inset-0 z-0">
+                <InteractiveRobotSpline
+                    scene={ROBOT_SCENE_URL}
+                    className="w-full h-full"
+                />
+            </div>
+
+            {/* Foreground: Split Overlay */}
+            <div className="relative z-10 w-full h-full flex flex-col md:flex-row pointer-events-none">
+
+                {/* Left Area: Welcome Text */}
+                <div className="w-full md:w-1/2 flex items-center justify-center p-8 pointer-events-auto">
+                    {showText && (
+                        <div className="w-full h-[200px] flex flex-col items-center justify-center gap-4">
+                            <VaporizeTextCycle
+                                texts={["Welcome"]}
+                                font={{
+                                    fontFamily: "Inter, sans-serif",
+                                    fontSize: "70px",
+                                    fontWeight: 600,
+                                }}
+                                color="rgb(255, 255, 255)"
+                                spread={5}
+                                density={5}
+                                animation={{
+                                    vaporizeDuration: 2,
+                                    fadeInDuration: 1,
+                                    waitDuration: 0.5,
+                                }}
+                                direction="left-to-right"
+                                alignment="center"
+                                tag={Tag.H1}
+                            />
+                        </div>
+                    )}
+                </div>
+
+                {/* Right Area: Enter Button */}
+                <div className="w-full md:w-1/2 flex items-center justify-center pointer-events-auto">
+                    {showText && (
+                        <div className="animate-in fade-in zoom-in duration-1000 slide-in-from-right-10">
+                            <InteractiveHoverButton
+                                text="Enter App"
+                                onClick={onComplete}
+                                className="w-40 text-black border-white/20 hover:text-white"
+                            />
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
