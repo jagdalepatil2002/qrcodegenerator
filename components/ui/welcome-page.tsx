@@ -4,9 +4,9 @@ import React, { useEffect } from "react";
 import VaporizeTextCycle, { Tag } from "@/components/ui/vapour-text-effect";
 import { InteractiveRobotSpline } from "@/components/ui/interactive-3d-robot";
 import { PulseButton } from "@/components/ui/pulse-button";
-import { PulseBeams } from "@/components/ui/pulse-beams";
+import { PulseBeams, BeamPath } from "@/components/ui/pulse-beams";
 
-const beams = [
+const beams: BeamPath[] = [
     {
         path: "M269 220.5H16.5C10.9772 220.5 6.5 224.977 6.5 230.5V398.5",
         gradientConfig: {

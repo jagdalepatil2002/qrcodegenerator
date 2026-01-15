@@ -4,7 +4,7 @@ import React from "react";
 import { motion, Transition } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface BeamPath {
+export interface BeamPath {
     path: string;
     gradientConfig: {
         initial: {
