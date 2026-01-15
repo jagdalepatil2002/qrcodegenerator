@@ -113,21 +113,31 @@ export function QRCodeGenerator() {
     };
 
     const downloadPNG = () => {
+        const svgElement = qrRef.current?.querySelector("svg");
+        if (!svgElement) return;
+
+        const serializer = new XMLSerializer();
+        const svgString = serializer.serializeToString(svgElement);
+        const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+        const url = URL.createObjectURL(svgBlob);
+
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        canvas.width = size;
-        canvas.height = size;
         const img = new Image();
-        img.src = `data:image/svg+xml,${encodeURIComponent(qrRef.current?.innerHTML || "")}`;
         img.onload = () => {
+            canvas.width = size;
+            canvas.height = size;
             ctx.drawImage(img, 0, 0);
+            URL.revokeObjectURL(url);
+
             const link = document.createElement("a");
             link.href = canvas.toDataURL("image/png");
             link.download = "qrcode.png";
             link.click();
         };
+        img.src = url;
     };
 
     return (
