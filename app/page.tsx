@@ -56,7 +56,7 @@ export default function Home() {
       <footer className="relative z-10 flex w-full items-center justify-center gap-2 py-6 text-sm text-neutral-500">
         <span>Made with ❤️ by Tejas Jagdale 2025</span>
         <a
-          href="https://www.linkedin.com/company/tejasjagdale/"
+          href="https://www.linkedin.com/in/jagdaletejas/"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
