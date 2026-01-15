@@ -151,9 +151,23 @@ export function QRCodeGenerator() {
 
         const img = new Image();
         img.onload = () => {
+            const extraHeight = 50; // Space for text
             canvas.width = size;
-            canvas.height = size;
+            canvas.height = size + extraHeight;
+
+            // Fill background
+            ctx.fillStyle = backgroundColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw QR code
             ctx.drawImage(img, 0, 0);
+
+            // Draw Text
+            ctx.fillStyle = color;
+            ctx.font = `bold ${Math.max(12, size / 20)}px "Courier New", Courier, monospace`;
+            ctx.textAlign = "center";
+            ctx.fillText(text, size / 2, size + 30);
+
             URL.revokeObjectURL(url);
 
             const link = document.createElement("a");
