@@ -85,7 +85,7 @@ export const PulseBeams = ({
     );
 };
 
-const SVGs = ({ beams, width, height, baseColor, accentColor, gradientColors }) => {
+const SVGs = ({ beams, width, height, baseColor, accentColor, gradientColors }: PulseBeamsProps) => {
     return (
         <svg
             width={width}
@@ -143,7 +143,7 @@ const GradientColors = ({ colors = {
     start: "#18CCFC",
     middle: "#6344F5",
     end: "#AE48FF"
-} }) => {
+} }: { colors?: { start: string; middle: string; end: string } }) => {
     return (
         <>
             <stop offset="0%" stopColor={colors.start} stopOpacity="0" />
